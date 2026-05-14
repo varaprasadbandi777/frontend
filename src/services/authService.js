@@ -12,8 +12,8 @@ const logout = () => {
   localStorage.removeItem('user');
 };
 
-const register = async (name, email, password, role) => {
-  const response = await api.post('auth/register', { name, email, password, role });
+const register = async (name, email, password, role, adminSecret) => {
+  const response = await api.post('auth/register', { name, email, password, role, adminSecret });
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));
   }

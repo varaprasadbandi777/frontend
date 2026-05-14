@@ -7,6 +7,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Teacher');
+  const [adminSecret, setAdminSecret] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Register = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await authService.register(name, email, password, role);
+      const data = await authService.register(name, email, password, role, adminSecret);
       if (data) {
         // Redirect based on role
         if (data.role === 'Admin') navigate('/admin');
@@ -96,6 +97,20 @@ const Register = () => {
               <option value="Parent">Parent</option>
             </select>
           </div>
+
+          {role === 'Admin' && (
+            <div className="mb-4 animate-fade-in">
+              <label className="form-label text-danger small fw-bold">Admin Registration Secret</label>
+              <input 
+                type="password" 
+                className="form-control form-control-custom border-danger" 
+                value={adminSecret}
+                onChange={(e) => setAdminSecret(e.target.value)}
+                required
+                placeholder="Enter secret key to register as Admin"
+              />
+            </div>
+          )}
           
           <button type="submit" className="btn btn-primary-custom w-100 mb-3" disabled={loading}>
             {loading ? 'Creating Account...' : 'Sign Up'}
