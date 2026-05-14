@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import authService from '../services/authService';
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Teacher');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const data = await authService.login(email, password);
+      const data = await authService.register(name, email, password, role);
       if (data) {
         // Redirect based on role
         if (data.role === 'Admin') navigate('/admin');
@@ -24,7 +26,7 @@ const Login = () => {
         else navigate('/admin');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -32,10 +34,10 @@ const Login = () => {
 
   return (
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
-      <div className="glass-card p-5" style={{ width: '100%', maxWidth: '400px' }}>
+      <div className="glass-card p-5" style={{ width: '100%', maxWidth: '450px' }}>
         <div className="text-center mb-4">
-          <h2 className="gradient-text fw-bold mb-2">CTMS</h2>
-          <p className="text-muted">Welcome back! Please login to your account.</p>
+          <h2 className="gradient-text fw-bold mb-2">Create Account</h2>
+          <p className="text-muted">Join the Class Teacher Management System</p>
         </div>
         
         {error && (
@@ -44,7 +46,19 @@ const Login = () => {
           </div>
         )}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
+          <div className="mb-3">
+            <label className="form-label text-muted small">Full Name</label>
+            <input 
+              type="text" 
+              className="form-control form-control-custom" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="John Doe"
+            />
+          </div>
+
           <div className="mb-3">
             <label className="form-label text-muted small">Email Address</label>
             <input 
@@ -57,11 +71,8 @@ const Login = () => {
             />
           </div>
           
-          <div className="mb-4">
-            <label className="form-label text-muted small d-flex justify-content-between">
-              Password
-              <a href="#" className="text-primary text-decoration-none">Forgot?</a>
-            </label>
+          <div className="mb-3">
+            <label className="form-label text-muted small">Password</label>
             <input 
               type="password" 
               className="form-control form-control-custom" 
@@ -71,14 +82,28 @@ const Login = () => {
               placeholder="••••••••"
             />
           </div>
+
+          <div className="mb-4">
+            <label className="form-label text-muted small">Role</label>
+            <select 
+              className="form-select form-control-custom"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="Admin">Admin</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Student">Student</option>
+              <option value="Parent">Parent</option>
+            </select>
+          </div>
           
           <button type="submit" className="btn btn-primary-custom w-100 mb-3" disabled={loading}>
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? 'Creating Account...' : 'Sign Up'}
           </button>
 
           <div className="text-center">
             <p className="text-muted small mb-0">
-              Don't have an account? <Link to="/register" className="text-primary text-decoration-none">Sign Up</Link>
+              Already have an account? <Link to="/login" className="text-primary text-decoration-none">Sign In</Link>
             </p>
           </div>
         </form>
@@ -87,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
