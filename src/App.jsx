@@ -11,6 +11,7 @@ import Marks from './pages/Marks';
 import Timetable from './pages/Timetable';
 import Notifications from './pages/Notifications';
 import Reports from './pages/Reports';
+import Approvals from './pages/Approvals';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path="teacher" element={<TeacherDashboard />} />
               <Route path="attendance" element={<Attendance />} />
               <Route path="marks" element={<Marks />} />
+              <Route path="approvals" element={<Approvals />} />
             </Route>
             
             <Route element={<ProtectedRoute allowedRoles={['Student']} />}>

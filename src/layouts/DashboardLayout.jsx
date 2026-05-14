@@ -3,19 +3,27 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user')) || {};
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
-  const menuItems = [
-    { path: '/admin', icon: 'bi-grid-1x2', label: 'Dashboard' },
-    { path: '/attendance', icon: 'bi-calendar-check', label: 'Attendance' },
-    { path: '/marks', icon: 'bi-journal-text', label: 'Marks Entry' },
-    { path: '/timetable', icon: 'bi-clock', label: 'Timetable' },
-    { path: '/reports', icon: 'bi-file-earmark-bar-graph', label: 'Reports' },
-    { path: '/notifications', icon: 'bi-bell', label: 'Notifications' },
+  const allMenuItems = [
+    { path: '/admin', icon: 'bi-grid-1x2', label: 'Dashboard', roles: ['Admin'] },
+    { path: '/teacher', icon: 'bi-grid-1x2', label: 'Dashboard', roles: ['Teacher'] },
+    { path: '/student', icon: 'bi-grid-1x2', label: 'Dashboard', roles: ['Student'] },
+    { path: '/parent', icon: 'bi-grid-1x2', label: 'Dashboard', roles: ['Parent'] },
+    { path: '/approvals', icon: 'bi-person-check', label: 'Approvals', roles: ['Admin', 'Teacher'] },
+    { path: '/attendance', icon: 'bi-calendar-check', label: 'Attendance', roles: ['Admin', 'Teacher'] },
+    { path: '/marks', icon: 'bi-journal-text', label: 'Marks Entry', roles: ['Admin', 'Teacher'] },
+    { path: '/timetable', icon: 'bi-clock', label: 'Timetable', roles: ['Admin', 'Teacher', 'Student', 'Parent'] },
+    { path: '/reports', icon: 'bi-file-earmark-bar-graph', label: 'Reports', roles: ['Admin', 'Teacher', 'Student', 'Parent'] },
+    { path: '/notifications', icon: 'bi-bell', label: 'Notifications', roles: ['Admin', 'Teacher', 'Student', 'Parent'] },
   ];
+
+  const menuItems = allMenuItems.filter(item => item.roles.includes(user.role));
 
   return (
     <div className="container-fluid p-0">
@@ -45,8 +53,8 @@ const DashboardLayout = () => {
             <hr className="w-100 border-secondary" />
             <div className="dropdown pb-4 w-100">
               <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle px-3 py-2 w-100 nav-link-custom" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="hugenerd" width="30" height="30" className="rounded-circle" />
-                <span className="d-none d-sm-inline mx-2 text-muted">Admin User</span>
+                <img src={`https://ui-avatars.com/api/?name=${(user.name || 'User').replace(' ', '+')}&background=6366f1&color=fff`} alt="hugenerd" width="30" height="30" className="rounded-circle" />
+                <span className="d-none d-sm-inline mx-2 text-muted">{user.name || 'User'}</span>
               </a>
               <ul className="dropdown-menu dropdown-menu-dark text-small shadow w-100" aria-labelledby="dropdownUser">
                 <li><a className="dropdown-item" href="#">Profile</a></li>
