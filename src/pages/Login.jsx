@@ -5,6 +5,7 @@ import authService from '../services/authService';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -62,14 +63,23 @@ const Login = () => {
               Password
               <a href="#" className="text-primary text-decoration-none">Forgot?</a>
             </label>
-            <input 
-              type="password" 
-              className="form-control form-control-custom" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
+            <div className="input-group">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                className="form-control form-control-custom border-end-0" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+              <button 
+                className="btn btn-outline-custom border-start-0" 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`bi bi-eye${showPassword ? '-slash' : ''}`}></i>
+              </button>
+            </div>
           </div>
           
           <button type="submit" className="btn btn-primary-custom w-100 mb-3" disabled={loading}>

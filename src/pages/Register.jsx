@@ -8,6 +8,8 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Teacher');
   const [adminSecret, setAdminSecret] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -74,14 +76,23 @@ const Register = () => {
           
           <div className="mb-3">
             <label className="form-label text-muted small">Password</label>
-            <input 
-              type="password" 
-              className="form-control form-control-custom" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
+            <div className="input-group">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                className="form-control form-control-custom border-end-0" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+              <button 
+                className="btn btn-outline-custom border-start-0" 
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`bi bi-eye${showPassword ? '-slash' : ''}`}></i>
+              </button>
+            </div>
           </div>
 
           <div className="mb-4">
@@ -101,14 +112,23 @@ const Register = () => {
           {role === 'Admin' && (
             <div className="mb-4 animate-fade-in">
               <label className="form-label text-danger small fw-bold">Admin Registration Secret</label>
-              <input 
-                type="password" 
-                className="form-control form-control-custom border-danger" 
-                value={adminSecret}
-                onChange={(e) => setAdminSecret(e.target.value)}
-                required
-                placeholder="Enter secret key to register as Admin"
-              />
+              <div className="input-group">
+                <input 
+                  type={showSecret ? "text" : "password"} 
+                  className="form-control form-control-custom border-danger border-end-0" 
+                  value={adminSecret}
+                  onChange={(e) => setAdminSecret(e.target.value)}
+                  required
+                  placeholder="Enter secret key to register as Admin"
+                />
+                <button 
+                  className="btn btn-outline-danger border-start-0" 
+                  type="button"
+                  onClick={() => setShowSecret(!showSecret)}
+                >
+                  <i className={`bi bi-eye${showSecret ? '-slash' : ''}`}></i>
+                </button>
+              </div>
             </div>
           )}
           
